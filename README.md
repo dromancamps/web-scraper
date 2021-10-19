@@ -5,3 +5,8 @@
 3. Install scrapy: `pip3 install scrapy`.
 4. Create scrapy project: `scrapy startproject testscrape`.
 5. Create spider in testscreape/spiders folder.
+
+## Usage
+
+Go to testscreape direcotry (outer one), and execute `scrapy crawl post -O test.json`.
+This woll save the result in test.json file.
