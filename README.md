@@ -9,4 +9,8 @@
 ## Usage
 
 Go to testscreape direcotry (outer one), and execute `scrapy crawl post -O test.json`.
-This woll save the result in test.json file.
+This will save the result in test.json file
+
+## Advice
+
+Remember to remove (or not to add) `tbody` in XPath.
