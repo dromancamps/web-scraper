@@ -24,7 +24,17 @@ class EsangoSpider(scrapy.Spider):
         return arr
 
     def getActivities(self, response):
-        return []
+        areas = response.xpath("/html/body/form/table[3]/tr[1]/td[2]/b/text()")
+        result = {}
+        if areas is not None:
+            for area in areas:
+                areaText = self.trimOrNull(area.get())
+                index = areas.index(area)
+                followingCond = ""
+                if index != len(areas)-1:
+                    followingCond = " and following-sibling::b[text() = '"+ self.trimOrNull(areas[index+1].get()) + "']"
+                result[areaText] = self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[1]/td[2]/li[preceding-sibling::b[text() = '" + areaText + "']" + followingCond + "]/text()")
+        return result
 
     # Retrieves all necessary NGO data fields
     def parse_desc(self, response):
@@ -39,9 +49,11 @@ class EsangoSpider(scrapy.Spider):
             'languages': self.getValuesAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Languages')]]/td[2]/ul/li/text()"),
             'activities': self.getActivities(response),
             'scope': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'scope')]]/td[2]/text()"),
-            'country': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Country')]]/td[2]/text()"),
-            'statement': self.getValueAndTrim(response, ""),
-            'funding': self.getValuesAndTrim(response, ""),
+            'country': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Country')]]/td[2]/ul/li/text()"),
+            'statement': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'statement')]]/td[2]/text()"),
+            'established': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'established')]]/td[2]/text()"),
+            'members': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'members')]]/td[2]/text()"),
+            'funding': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Funding')]]/td[2]/ul/li/text()"),
         }
 
     # Navigates through website and retrieves all NGO URLs
