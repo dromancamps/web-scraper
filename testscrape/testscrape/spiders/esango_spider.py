@@ -39,14 +39,16 @@ class EsangoSpider(scrapy.Spider):
     # Retrieves all necessary NGO data fields
     def parse_desc(self, response):
         yield {
-#            'url': response.url,
+            # 'url': response.url,
             'title': self.getValueAndTrim(response, "/html/body/form/h3[1]/text()"),
             'acronym': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'acronym')]]/td[2]/text()"),
+            'hq': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Address')]]/td[2]/text()[position() = last()]"),
             'phone': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Phone')]]/td[2]/text()"),
             'mail': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Email')]]/td[2]/text()"),
             'website': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Web site')]]/td[2]/text()"),
             'type': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Organization type')]]/td[2]/text()"),
             'languages': self.getValuesAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Languages')]]/td[2]/ul/li/text()"),
+            'remarks': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Remarks')]]/td[2]/text()"),
             'activities': self.getActivities(response),
             'scope': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'scope')]]/td[2]/text()"),
             'country': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Country')]]/td[2]/ul/li/text()"),
