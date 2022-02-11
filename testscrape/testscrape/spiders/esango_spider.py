@@ -42,11 +42,7 @@ class EsangoSpider(scrapy.Spider):
         yield {
             # 'url': response.url,
             'title': self.getValueAndTrim(response, "/html/body/form/h3[1]/text()"),
-<<<<<<< HEAD
             'acronym': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'acronym')]]/td[2]/text()"),
-=======
-            'acronym': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), \"Organization's acronym\")]]/td[2]/text()"),
->>>>>>> ef154cd (scraper fixes)
             'hq': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Address')]]/td[2]/text()[position() = last()]"),
             'phone': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Phone')]]/td[2]/text()"),
             'mail': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Email')]]/td[2]/text()"),
@@ -54,15 +50,6 @@ class EsangoSpider(scrapy.Spider):
             'type': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Organization type')]]/td[2]/text()"),
             'languages': self.getValuesAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Languages')]]/td[2]/ul/li/text()"),
             'remarks': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Remarks')]]/td[2]/text()"),
-<<<<<<< HEAD
-=======
-            'scope': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Geographic scope')]]/td[2]/text()"),
-            'country': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Country of activity')]]/td[2]/ul/li/text()"),
-            'statement': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Mission statement')]]/td[2]/label/text()"),
-            'established': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Year established')]]/td[2]/text()"),
-            'members': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Number and type of members')]]/td[2]/text()"),
-            'funding': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Funding structure')]]/td[2]/ul/li/text()"),
->>>>>>> ef154cd (scraper fixes)
             'activities': self.getActivities(response),
         }
 
