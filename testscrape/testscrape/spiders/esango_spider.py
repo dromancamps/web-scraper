@@ -6,23 +6,24 @@ class EsangoSpider(scrapy.Spider):
     name = "esango"
     start_urls = ['https://esango.un.org/civilsociety/withOutLogin.do?method=getOrgsByTypesCode&orgTypeCode=6&orgTypName=Non-governmental%20organization&sessionCheck=false&ngoFlag=']
 
+    # If value is not null, trim it
     def trimOrNull(self, value):
         return value if value is None else value.strip()
 
-    def getValue(self, response, xpath):
-        return response.xpath(xpath).get()
-
+    # Retrieve the value on XPath position and trim it if is not null
     def getValueAndTrim(self, response, xpath):
-        return self.trimOrNull(self.getValue(response, xpath))
+        return self.trimOrNull(response.xpath(xpath).get())
 
+    # Retrieve a list of values on XPath position and trim them if are not null
     def getValuesAndTrim(self, response, xpath):
-        langs = response.xpath(xpath);
+        list = response.xpath(xpath);
         arr = []
-        if langs is not None:
-            for lang in langs:
-                arr.append(self.trimOrNull(lang.get()))
+        if list is not None:
+            for elem in list:
+                arr.append(self.trimOrNull(elem.get()))
         return arr
 
+    # Gets all generic and specific activities
     def getActivities(self, response):
         areas = response.xpath("/html/body/form/table[3]/tr[1]/td[2]/b/text()")
         result = {}
@@ -41,7 +42,11 @@ class EsangoSpider(scrapy.Spider):
         yield {
             # 'url': response.url,
             'title': self.getValueAndTrim(response, "/html/body/form/h3[1]/text()"),
+<<<<<<< HEAD
             'acronym': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'acronym')]]/td[2]/text()"),
+=======
+            'acronym': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), \"Organization's acronym\")]]/td[2]/text()"),
+>>>>>>> ef154cd (scraper fixes)
             'hq': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Address')]]/td[2]/text()[position() = last()]"),
             'phone': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Phone')]]/td[2]/text()"),
             'mail': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Email')]]/td[2]/text()"),
@@ -49,13 +54,16 @@ class EsangoSpider(scrapy.Spider):
             'type': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Organization type')]]/td[2]/text()"),
             'languages': self.getValuesAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Languages')]]/td[2]/ul/li/text()"),
             'remarks': self.getValueAndTrim(response, "/html/body/form/table[1]/tr[td[contains(text(), 'Remarks')]]/td[2]/text()"),
+<<<<<<< HEAD
+=======
+            'scope': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Geographic scope')]]/td[2]/text()"),
+            'country': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Country of activity')]]/td[2]/ul/li/text()"),
+            'statement': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Mission statement')]]/td[2]/label/text()"),
+            'established': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Year established')]]/td[2]/text()"),
+            'members': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Number and type of members')]]/td[2]/text()"),
+            'funding': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Funding structure')]]/td[2]/ul/li/text()"),
+>>>>>>> ef154cd (scraper fixes)
             'activities': self.getActivities(response),
-            'scope': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'scope')]]/td[2]/text()"),
-            'country': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Country')]]/td[2]/ul/li/text()"),
-            'statement': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'statement')]]/td[2]/text()"),
-            'established': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'established')]]/td[2]/text()"),
-            'members': self.getValueAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'members')]]/td[2]/text()"),
-            'funding': self.getValuesAndTrim(response, "/html/body/form/table[3]/tr[td[contains(text(), 'Funding')]]/td[2]/ul/li/text()"),
         }
 
     # Navigates through website and retrieves all NGO URLs
